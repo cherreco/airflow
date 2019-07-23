@@ -189,11 +189,15 @@ class WorkerConfiguration(LoggingMixin):
         """Defines the security context"""
         security_context = {}
 
+        #########
+        # CHERRE(zav)
+        # bug: user number and fs group should be of init type. :?
         if self.kube_config.worker_run_as_user:
-            security_context['runAsUser'] = self.kube_config.worker_run_as_user
+            security_context['runAsUser'] = int(self.kube_config.worker_run_as_user)
 
         if self.kube_config.worker_fs_group:
-            security_context['fsGroup'] = self.kube_config.worker_fs_group
+            security_context['fsGroup'] = int(self.kube_config.worker_fs_group)
+        #########
 
         # set fs_group to 65533 if not explicitly specified and using git ssh keypair auth
         if self.kube_config.git_ssh_key_secret_name and security_context.get('fsGroup') is None:
