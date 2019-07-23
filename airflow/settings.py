@@ -92,6 +92,16 @@ HEADER = '\n'.join([
     r' _/_/  |_/_/  /_/    /_/    /_/  \____/____/|__/',
 ])
 
+HEADER = (
+    """
+------------------------------
+------CHERRE-AUGMENTED--------
+------------------------------
+"""
+    + HEADER
+)
+
+
 LOGGING_LEVEL = logging.INFO
 
 # the prefix to append to gunicorn worker processes after init
@@ -169,6 +179,25 @@ def configure_orm(disable_connection_pool=False):
         except conf.AirflowConfigException:
             pool_size = 5
 
+
+        ## CHERRE (zav)
+
+        # The maximum overflow size of the pool.
+        # When the number of checked-out connections reaches the size set in pool_size,
+        # additional connections will be returned up to this limit.
+        # When those additional connections are returned to the pool, they are disconnected and discarded.
+        # It follows then that the total number of simultaneous connections
+        # the pool will allow is pool_size + max_overflow,
+        # and the total number of “sleeping” connections the pool will allow is pool_size.
+        # max_overflow can be set to -1 to indicate no overflow limit;
+        # no limit will be placed on the total number
+        # of concurrent connections. Defaults to 10.
+        try:
+            max_overflow = conf.getint('core', 'SQL_ALCHEMY_MAX_OVERFLOW')
+        except conf.AirflowConfigException:
+            max_overflow = 1
+        ## END CHERRE (zav)
+
         # The DB server already has a value for wait_timeout (number of seconds after
         # which an idle sleeping connection should be killed). Since other DBs may
         # co-exist on the same server, SQLAlchemy should set its
@@ -182,6 +211,11 @@ def configure_orm(disable_connection_pool=False):
                  "pool_recycle={}, pid={}".format(pool_size, pool_recycle, os.getpid()))
         engine_args['pool_size'] = pool_size
         engine_args['pool_recycle'] = pool_recycle
+        
+        ## CHERRE (zav)
+        engine_args['max_overflow'] = max_overflow
+        ## END CHERRE (zav)
+
 
     # Allow the user to specify an encoding for their DB otherwise default
     # to utf-8 so jobs & users with non-latin1 characters can still use
