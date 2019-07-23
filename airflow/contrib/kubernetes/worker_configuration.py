@@ -258,6 +258,14 @@ class WorkerConfiguration(LoggingMixin):
             del volumes[self.dags_volume_name]
             del volume_mounts[self.dags_volume_name]
 
+        ###########
+        # CHERRE (zav):
+        # add option.
+        if self.kube_config.logs_in_image:
+            del volumes[self.logs_volume_name]
+            del volume_mounts[self.logs_volume_name]
+        ###########
+
         # Get the SSH key from secrets as a volume
         if self.kube_config.git_ssh_key_secret_name:
             volumes[self.git_sync_ssh_secret_volume_name] = {
