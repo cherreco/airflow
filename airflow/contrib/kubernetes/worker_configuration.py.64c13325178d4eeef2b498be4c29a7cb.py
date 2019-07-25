@@ -340,18 +340,15 @@ class WorkerConfiguration(LoggingMixin):
         ##############
         # CHERRE(zav)
         # augment the airflow command (entrypoint)
-        airflow_command[0] = kube_executor_config.airflow_executor or airflow_command[0]
-        image = kube_executor_config.image or self.kube_config.kube_image
+        airflow_command[0]=kube_executor_config.airflow_executor or airflow_command[0]
         #############
 
         return Pod(
             namespace=namespace,
             name=pod_id,
-            image=image,
-            image_pull_policy=(
-                kube_executor_config.image_pull_policy or
-                self.kube_config.kube_image_pull_policy
-            ),
+            image=kube_executor_config.image or self.kube_config.kube_image,
+            image_pull_policy=(kube_executor_config.image_pull_policy or
+                               self.kube_config.kube_image_pull_policy),
             cmds=airflow_command,
             labels={
                 'airflow-worker': worker_uuid,
