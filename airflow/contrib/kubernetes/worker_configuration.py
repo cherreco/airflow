@@ -340,7 +340,8 @@ class WorkerConfiguration(LoggingMixin):
         ##############
         # CHERRE(zav)
         # augment the airflow command (entrypoint)
-        airflow_command[0] = kube_executor_config.airflow_executor or airflow_command[0]
+        if hasattr(kube_executor_config,'airflow_executor'):
+            airflow_command[0] = kube_executor_config.airflow_executor or airflow_command[0]
         #############
 
         return Pod(
