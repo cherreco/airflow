@@ -154,6 +154,7 @@ class KubeConfig:
         # NOTE: user can build the dags into the docker image directly,
         # this will set to True if so
         self.dags_in_image = conf.getboolean(self.kubernetes_section, 'dags_in_image')
+        self.logs_in_image = conf.getboolean(self.kubernetes_section, 'logs_in_image')
 
         # Run as user for pod security context
         self.worker_run_as_user = conf.get(self.kubernetes_section, 'run_as_user')
