@@ -106,7 +106,6 @@ if watermark is not None:
     watermark = watermark.strip()
     watermark = watermark if len(watermark)>0 else None
     logging.info(f"Loaded server lama as {watermark}")
-    current_user.watermark=watermark
 
 if watermark is not None:
     os.environ["AIRFLOW_DISPLAY_WATERMARK"]=watermark
