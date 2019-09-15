@@ -101,8 +101,9 @@ PAGE_SIZE = conf.getint('webserver', 'page_size')
 ######################
 # (Zav Cherre)
 WATERMARK = conf.get("webserver", "watermark")
-WATERMARK = WATERMARK.strip()
-WATERMARK = WATERMARK if len(WATERMARK)>0 else None
+if WATERMARK is not None:
+    WATERMARK = WATERMARK.strip()
+    WATERMARK = WATERMARK if len(WATERMARK)>0 else None
 #####################
 
 if conf.getboolean('webserver', 'FILTER_BY_OWNER'):
