@@ -103,9 +103,9 @@ PAGE_SIZE = conf.getint('webserver', 'page_size')
 WATERMARK = conf.get("webserver", "watermark")
 if WATERMARK is not None:
     WATERMARK = str(WATERMARK)
-    logging.info(f"Loaded server watermark as {WATERMARK}")
     WATERMARK = WATERMARK.strip()
     WATERMARK = WATERMARK if len(WATERMARK)>0 else None
+    logging.info(f"Loaded server watermark as {WATERMARK}")
 
 if WATERMARK is not None:
     os.environ["AIRFLOW_DISPLAY_WATERMARK"]=WATERMARK
