@@ -98,6 +98,13 @@ FILTER_BY_OWNER = False
 
 PAGE_SIZE = conf.getint('webserver', 'page_size')
 
+######################
+# (Zav Cherre)
+WATERMARK = conf.get("webserver", "watermark")
+WATERMARK = WATERMARK.strip()
+WATERMARK = WATERMARK if len(WATERMARK)>0 else None
+#####################
+
 if conf.getboolean('webserver', 'FILTER_BY_OWNER'):
     # filter_by_owner if authentication is enabled and filter_by_owner is true
     FILTER_BY_OWNER = not current_app.config['LOGIN_DISABLED']
