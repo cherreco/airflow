@@ -100,7 +100,7 @@ PAGE_SIZE = conf.getint('webserver', 'page_size')
 
 ######################
 # (Zav Cherre)
-watermark = conf.get("webserver", "watermark")
+watermark = str(conf.get("webserver", "watermark"))
 if watermark is not None:
     watermark = str(watermark)
     watermark = watermark.strip()
@@ -2279,7 +2279,6 @@ class AirflowModelView(ModelView):
     create_template = 'airflow/model_create.html'
     column_display_actions = True
     page_size = PAGE_SIZE
-    watermark = "lama"
 
 
 class ModelViewOnly(wwwutils.LoginMixin, AirflowModelView):

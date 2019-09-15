@@ -163,6 +163,7 @@ def create_app(config=None, testing=False):
         @app.context_processor
         def jinja_globals():
             return {
+                'WATERMARK': str(configuration.get("webserver", "WATERMARK")),
                 'hostname': get_hostname(),
                 'navbar_color': configuration.get('webserver', 'NAVBAR_COLOR'),
             }
