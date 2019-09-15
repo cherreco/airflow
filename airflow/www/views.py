@@ -106,6 +106,9 @@ if WATERMARK is not None:
     logging.info(f"Loaded server watermark as {WATERMARK}")
     WATERMARK = WATERMARK.strip()
     WATERMARK = WATERMARK if len(WATERMARK)>0 else None
+
+current_user.watermark=WATERMARK
+
 #####################
 
 if conf.getboolean('webserver', 'FILTER_BY_OWNER'):
