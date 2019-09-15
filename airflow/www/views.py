@@ -98,28 +98,9 @@ FILTER_BY_OWNER = False
 
 PAGE_SIZE = conf.getint('webserver', 'page_size')
 
-######################
-# (Zav Cherre)
-watermark = str(conf.get("webserver", "watermark"))
-if watermark is not None:
-    watermark = str(watermark)
-    watermark = watermark.strip()
-    watermark = watermark if len(watermark)>0 else None
-    logging.info(f"Loaded server lama as {watermark}")
-
-if watermark is not None:
-    os.environ["AIRFLOW_DISPLAY_WATERMARK"]=watermark
-    logging.info(f"Set env AIRFLOW_DISPLAY_WATERMARK={watermark}")
-
-#####################
-
 if conf.getboolean('webserver', 'FILTER_BY_OWNER'):
     # filter_by_owner if authentication is enabled and filter_by_owner is true
     FILTER_BY_OWNER = not current_app.config['LOGIN_DISABLED']
-
-def watermark():
-    watermark = os.environ.get("AIRFLOW_DISPLAY_WATERMARK","lama")
-    return Markup(f"{watermark}")
 
 def dag_link(v, c, m, p):
     if m.dag_id is None:
