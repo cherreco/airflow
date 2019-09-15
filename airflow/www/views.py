@@ -100,16 +100,16 @@ PAGE_SIZE = conf.getint('webserver', 'page_size')
 
 ######################
 # (Zav Cherre)
-WATERMARK = conf.get("webserver", "watermark")
-if WATERMARK is not None:
-    WATERMARK = str(WATERMARK)
-    WATERMARK = WATERMARK.strip()
-    WATERMARK = WATERMARK if len(WATERMARK)>0 else None
-    logging.info(f"Loaded server lama as {WATERMARK}")
+watermark = conf.get("webserver", "watermark")
+if watermark is not None:
+    watermark = str(watermark)
+    watermark = watermark.strip()
+    watermark = watermark if len(watermark)>0 else None
+    logging.info(f"Loaded server lama as {watermark}")
 
-if WATERMARK is not None:
-    os.environ["AIRFLOW_DISPLAY_WATERMARK"]=WATERMARK
-    logging.info(f"Set env AIRFLOW_DISPLAY_WATERMARK={WATERMARK}")
+if watermark is not None:
+    os.environ["AIRFLOW_DISPLAY_WATERMARK"]=watermark
+    logging.info(f"Set env AIRFLOW_DISPLAY_WATERMARK={watermark}")
 
 #####################
 
