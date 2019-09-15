@@ -107,7 +107,9 @@ if WATERMARK is not None:
     WATERMARK = WATERMARK.strip()
     WATERMARK = WATERMARK if len(WATERMARK)>0 else None
 
-current_user.watermark=WATERMARK
+if WATERMARK is not None:
+    os.environ["AIRFLOW_DISPLAY_WATERMARK"]=WATERMARK
+    logging.info(f"Set env AIRFLOW_DISPLAY_WATERMARK={WATERMARK}")
 
 #####################
 
