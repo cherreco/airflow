@@ -102,6 +102,7 @@ PAGE_SIZE = conf.getint('webserver', 'page_size')
 # (Zav Cherre)
 WATERMARK = conf.get("webserver", "watermark")
 if WATERMARK is not None:
+    WATERMARK = str(WATERMARK)
     WATERMARK = WATERMARK.strip()
     WATERMARK = WATERMARK if len(WATERMARK)>0 else None
 #####################
