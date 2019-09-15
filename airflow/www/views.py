@@ -2279,7 +2279,7 @@ class AirflowModelView(ModelView):
     create_template = 'airflow/model_create.html'
     column_display_actions = True
     page_size = PAGE_SIZE
-    watermark = watermark
+    watermark = "lama"
 
 
 class ModelViewOnly(wwwutils.LoginMixin, AirflowModelView):
