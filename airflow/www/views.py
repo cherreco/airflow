@@ -117,6 +117,9 @@ if conf.getboolean('webserver', 'FILTER_BY_OWNER'):
     # filter_by_owner if authentication is enabled and filter_by_owner is true
     FILTER_BY_OWNER = not current_app.config['LOGIN_DISABLED']
 
+def watermark():
+    watermark = os.environ.get("AIRFLOW_DISPLAY_WATERMARK","lama")
+    return Markup(f"{watermark}")
 
 def dag_link(v, c, m, p):
     if m.dag_id is None:
