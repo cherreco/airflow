@@ -105,7 +105,7 @@ if WATERMARK is not None:
     WATERMARK = str(WATERMARK)
     WATERMARK = WATERMARK.strip()
     WATERMARK = WATERMARK if len(WATERMARK)>0 else None
-    logging.info(f"Loaded server watermark as {WATERMARK}")
+    logging.info(f"Loaded server lama as {WATERMARK}")
 
 if WATERMARK is not None:
     os.environ["AIRFLOW_DISPLAY_WATERMARK"]=WATERMARK
