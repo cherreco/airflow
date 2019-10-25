@@ -31,12 +31,14 @@ import six
 from builtins import object
 from contextlib import contextmanager
 from logging import Handler, StreamHandler
+from airflow.config_templates import airflow_local_settings
 
 
 class LoggingMixin(object):
     """
     Convenience super-class to have a logger configured with the class name
     """
+
     def __init__(self, context=None):
         self._set_context(context)
 
@@ -70,17 +72,23 @@ class LoggingMixin(object):
 
 class StreamLogWriter(object):
     encoding = False
-
+    # CHERRE (Zav)
+    print_to_sys_buffer = None
+    # CHERRE (Zav)
     """
     Allows to redirect stdout and stderr to logger
     """
-    def __init__(self, logger, level):
+
+    def __init__(self, logger, level, print_to_sys_buffer=lambda txt: None):
         """
         :param log: The log level method to write to, ie. log.debug, log.warning
         :return:
         """
         self.logger = logger
         self.level = level
+        # CHERRE (Zav)
+        self.print_to_sys_buffer = print_to_sys_buffer
+        # CHERRE (Zav)
         self._buffer = str()
 
     def write(self, message):
@@ -92,8 +100,16 @@ class StreamLogWriter(object):
             self._buffer += message
         else:
             self._buffer += message
-            self.logger.log(self.level, self._buffer.rstrip())
+            to_print = self._buffer.rstrip()
+
+            ##########
+            # CHERRE (Zav)
+            # Added override to allow printing of the log to another system buffer.
             self._buffer = str()
+            self.logger.log(self.level, to_print)
+            if self.print_to_sys_buffer is not None:
+                self.print_to_sys_buffer(to_print)
+            ##########
 
     def flush(self):
         """
@@ -117,6 +133,7 @@ class RedirectStdHandler(StreamHandler):
     whatever sys.stderr/stderr is currently set to rather than the value of
     sys.stderr/stdout at handler construction time.
     """
+
     def __init__(self, stream):
         if not isinstance(stream, six.string_types):
             raise Exception("Cannot use file like objects. Use 'stdout' or 'stderr'"
@@ -139,7 +156,19 @@ class RedirectStdHandler(StreamHandler):
 
 @contextmanager
 def redirect_stdout(logger, level):
-    writer = StreamLogWriter(logger, level)
+    if not airflow_local_settings.PRINT_TASK_LOGS_TO_FILE:
+        yield
+        return
+
+    def print_to_sys_buffer(txt):
+        if airflow_local_settings.PRINT_TASK_LOGS_TO_SHELL:
+            sys.__stdout__.write(txt)
+
+    writer = StreamLogWriter(
+        logger,
+        level,
+        print_to_sys_buffer=print_to_sys_buffer)
+
     try:
         sys.stdout = writer
         yield
@@ -149,7 +178,15 @@ def redirect_stdout(logger, level):
 
 @contextmanager
 def redirect_stderr(logger, level):
-    writer = StreamLogWriter(logger, level)
+    if not airflow_local_settings.PRINT_TASK_LOGS_TO_FILE:
+        yield
+        return
+
+    def print_to_sys_buffer(txt):
+        if airflow_local_settings.PRINT_TASK_LOGS_TO_SHELL:
+            sys.__stderr__.write(txt)
+
+    writer = StreamLogWriter(logger, level, print_to_sys_buffer)
     try:
         sys.stderr = writer
         yield

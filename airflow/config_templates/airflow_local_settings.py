@@ -32,6 +32,14 @@ from airflow.utils.file import mkdirs
 LOG_LEVEL = conf.get('core', 'LOGGING_LEVEL').upper()
 
 
+###############
+# CHERRE (zav)
+WORKER_COMMAND = conf.get('core', 'WORKER_COMMAND')
+PRINT_TASK_LOGS_TO_SHELL = conf.getboolean('core', 'PRINT_TASK_LOGS_TO_SHELL')
+PRINT_TASK_LOGS_TO_FILE = conf.getboolean('core', 'PRINT_TASK_LOGS_TO_FILE')
+###############
+
+
 # Flask appbuilder's info level log is very verbose,
 # so it's set to 'WARN' by default.
 FAB_LOG_LEVEL = conf.get('core', 'FAB_LOGGING_LEVEL').upper()
@@ -45,8 +53,6 @@ COLORED_LOG = conf.getboolean('core', 'COLORED_CONSOLE_LOG')
 COLORED_FORMATTER_CLASS = conf.get('core', 'COLORED_FORMATTER_CLASS')
 
 BASE_LOG_FOLDER = conf.get('core', 'BASE_LOG_FOLDER')
-
-WORKER_COMMAND = conf.get('core', 'WORKER_COMMAND')
 
 PROCESSOR_LOG_FOLDER = conf.get('scheduler', 'CHILD_PROCESS_LOG_DIRECTORY')
 
